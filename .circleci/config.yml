@@ -12,26 +12,23 @@ jobs:
       - run:
           name: Get sbt binary
           command: |
-                    sudo -i && apt update && sudo apt install -y curl
-                    curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb
-                    dpkg -i sbt-$SBT_VERSION.deb
-                    rm sbt-$SBT_VERSION.deb
-                    apt-get clean && apt-get autoclean
-
-      - restore_cache:
-          key: sbt-cache
+                    sudo apt update && sudo apt install -y curl
+                    sudo curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb
+                    sudo dpkg -i sbt-$SBT_VERSION.deb
+      # - restore_cache:
+      #     key: sbt-cache
       - run:
           name: Test and compile quickstart to FatJAR
           command: sbt reload assembly
       - store_artifacts:
           path: target/scala-2.12/quickstart-assembly-0.0.1-SNAPSHOT.jar
           destination: quickstart
-      - save_cache:
-          key: sbt-cache
-          paths:
-            - "~/.ivy2/cache"
-            - "~/.sbt"
-            - "~/.m2"
+      # - save_cache:
+      #     key: sbt-cache
+      #     paths:
+      #       - "~/.ivy2/cache"
+      #       - "~/.sbt"
+      #       - "~/.m2"
       - run:
           name: Setup common environment variables
           command: |
